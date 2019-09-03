@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+		"HTTP://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+<mapper namespace="userMapper">
+
+	<select id="selectUserList" resultType="com.project.dao.User">
+		SELECT * FROM USER_TBL
+	</select>
+
+	<insert id="insertUserOne" parameterType="com.project.dao.User">
+		INSERT INTO USER_TBL(USER_ID, USER_PW, USER_MOTTO, USER_NAME, USER_AGE, USER_GRADE, USER_SIGN_DATE, USER_HIT) VALUES (#{user_id}, #{user_pw}, #{user_motto}, #{user_name}, #{user_age}, '1', SYSDATE, 0)
+	</insert>
+	
+	<select id="selectUserLogin" parameterType="com.project.dao.User" resultType="com.project.dao.User">
+		SELECT USER_ID, USER_PW FROM USER_TBL WHERE USER_ID = #{user_id} AND USER_PW= #{user_pw}
+	</select>
+	
+	<select id="selectUserOne" parameterType="com.project.dao.User" resultType="com.project.dao.User">
+		SELECT USER_ID, USER_PW, USER_MOTTO, USER_NAME, USER_AGE, USER_GRADE, USER_SIGN_DATE, USER_HIT FROM USER_TBL WHERE USER_ID = #{user_id}
+	</select>
+	
+	<select id="selectUserPw" parameterType="java.lang.String" resultType="com.project.dao.User">
+		SELECT USER_PW FROM USER_TBL WHERE USER_PW = ${value}
+	</select>
+	
+	<update id="userHitUpdate" parameterType="string">
+		UPDATE USER_TBL SET USER_HIT = USER_HIT+1 WHERE USER_ID= #{id}
+	</update>
+	
+	<select id="selectUserAll" parameterType="string" resultType="com.project.dao.User">
+		SELECT * FROM USER_TBL WHERE USER_ID = #{user_id}
+	</select>
+	
+	<update id="updateUserOne" parameterType="com.project.dao.User">
+		UPDATE USER_TBL SET USER_PW = #{user_pw}, USER_MOTTO = #{user_motto}, USER_NAME = #{user_name}, USER_AGE = #{user_age} WHERE USER_ID = #{user_id}
+	</update>
+	
+	<delete id="deleteUserOne" parameterType="string">
+		DELETE FROM USER_TBL WHERE USER_ID = #{user_id}
+	</delete>
+	
+</mapper>

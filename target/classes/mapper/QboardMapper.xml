@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+					"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="QboardMapper">
+	<insert id="insertBoardOne" parameterType="map">
+		INSERT INTO QNA_TBL VALUES(SEQ_Q_NO.NEXTVAL, #{TI}, #{CO}, #{WR}, 1, SYSDATE)
+	</insert>
+	
+	<select id="selectBoardList" resultType="map">
+		SELECT 
+			Q_NO, 
+			Q_TITLE, 
+			Q_WRITER, 
+			Q_HIT, 
+			Q_DATE 
+		FROM 
+			QNA_TBL  
+		ORDER BY Q_NO DESC
+	</select>
+
+	
+	<resultMap id="result1" type="map">
+		<result property="Q_CONTENT" column="Q_CONTENT" jdbcType="CLOB" javaType="java.lang.String" />
+	</resultMap>
+	<select id="selectBoardOne" parameterType="int" resultMap="result1">
+		SELECT 
+			Q_NO, Q_TITLE, 
+			Q_CONTENT, Q_WRITER,
+			Q_HIT, TO_CHAR(Q_DATE, 'YYYY-MM-DD') Q_DATE 
+		FROM QNA_TBL WHERE Q_NO=#{no}
+	</select>
+	
+	<update id="updateBoardHit" parameterType="int">
+		UPDATE QNA_TBL SET Q_HIT = Q_HIT+1 WHERE Q_NO=#{no}
+	</update>
+	
+	<select id="selectBoardPrev" parameterType="int" resultType="int">
+		<![CDATA[
+		SELECT NVL(MAX(Q_NO),0) FROM QNA_TBL WHERE Q_NO < #{no}
+		]]>
+	</select>
+
+	<select id="selectBoardNext" parameterType="int" resultType="int">
+		<![CDATA[
+		SELECT NVL(MIN(Q_NO),0) FROM QNA_TBL WHERE Q_NO > #{no}
+		]]>
+	</select>
+	
+	<delete id="deleteBoardOne" parameterType="int">
+		DELETE FROM QNA_TBL WHERE Q_NO = #{no}
+	</delete>
+	
+	<update id="updateBoardOne" parameterType="map">
+		UPDATE 
+			QNA_TBL 
+		SET 
+			Q_TITLE=#{title}, 
+			Q_CONTENT=#{content}, 
+			Q_WRITER=#{writer}
+		WHERE 
+			Q_NO=#{no}
+	</update>
+
+</mapper>
